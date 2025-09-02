@@ -113,14 +113,18 @@ const Profile = () => {
     placeholder="100"
     name="ticketPrice"
     value={formData.ticketPrice}
+    className="form__input"
     onChange={handleInputChange}
-    className="form__input py-3.5"
   />
 </div>
-
-
 </div>
 </div>
+
+<div className="mb-5">
+  <p className="form__label">Qualifications*</p>
+
+</div>
+
       </form>
     </div>
   );
