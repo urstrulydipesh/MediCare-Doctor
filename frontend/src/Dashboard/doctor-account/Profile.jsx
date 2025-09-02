@@ -9,12 +9,15 @@ const Profile = () => {
     bio:'',
     gender:'',
     specialization:'',
-    ticketPrice:null, 
+    ticketPrice:0, 
+     qualifications:[],
+     experiences:[],
+     timeSlots:[],
   })
 
-  const handleInputChange = e => {
-
-  }
+  const handleInputChange = e => { 
+       setFormData({...formData, [e.target.name]: e.target.value})
+  };
 
   return (
     <div>
@@ -102,6 +105,20 @@ const Profile = () => {
         <option value="dermatologist">Dermatologist</option>
       </select>
   </div>
+
+<div>
+  <p className="form__label">Ticket Price*</p>
+  <input 
+    type="number"
+    placeholder="100"
+    name="ticketPrice"
+    value={formData.ticketPrice}
+    onChange={handleInputChange}
+    className="form__input py-3.5"
+  />
+</div>
+
+
 </div>
 </div>
       </form>
