@@ -14,11 +14,33 @@ const Profile = () => {
      qualifications:[{ starttingDate:"", endingDate:"", degree:"", university:""}],
      experiences:[{ starttingDate:"", endingDate:"", position:"", hospital:""}],
      timeSlots:[{ day:"", startingTime:"", endingTime:""}],
+     about:'',
+      photo:null,
   })
 
   const handleInputChange = e => { 
        setFormData({...formData, [e.target.name]: e.target.value})
   };
+
+  const handleFileInputChange = e => {} ;
+
+  const updateProfileHandler = async e => {
+    e.preventDefault();
+  };
+
+// reuseable function to add items dynamically
+const addItems = (key, item) => {
+
+  setFormData(prevFormData => ({...prevFormData, [key]:[...prevFormData[key], item]}))
+}
+
+  const addQualificationHandler = e => {
+    e.preventDefault()
+
+    addItems('qualifications', {
+     starttingDate:"", endingDate:"", degree:"", university:""
+    })
+  }
 
   return (
     <div>
@@ -174,11 +196,10 @@ const Profile = () => {
     </div>
   </div>
 ))}
-<button className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
+<button onClick={addQualificationHandler} className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
   Add Qualifications
 </button>
 </div>
-
 
 <div className="mb-5">
   <p className="form__label">Experiences*</p>
@@ -238,7 +259,7 @@ const Profile = () => {
   Add Experiences
 </button>
 </div>
-<div className="mb-5">
+<div className="mb-5"> 
   <p className="form__label">Time Slots*</p>
   {formData.timeSlots?.map((item, index) => (
   <div key={index}>
@@ -276,8 +297,8 @@ const Profile = () => {
           />
         </div>
         <div className="flex items-end">
-           <button className="bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] 
-       cursor-pointer">
+           <button className="bg-red-600 p-2 rounded-full text-white text-[18px] 
+       cursor-pointer mt-6">
    <AiOutlineDelete/> 
    </button>
         </div>
@@ -290,6 +311,50 @@ const Profile = () => {
   Add TimeSlots
 </button>
 </div>
+
+<div className="mb-5">
+  <p className=" ">About*</p>
+  <textarea 
+  name="about" 
+  rows={5} 
+  value={formData.about} 
+  placeholder="Write about yourself"
+  onChange={handleInputChange}
+  className="form__input rounded-none"
+  ></textarea>
+</div>
+
+<div className="mb-5 flex items-center gap-3">
+{ formData.photo && (<figure className='w-[60px] h-[60px] rounded-full border-2 border-solid
+               border-primaryColor flex items-center justify-center'>
+                <img src={formData.photo} alt="" className='w-full rounded-full' />
+              </figure>
+              )}
+
+              <div className='relative w-[130px] h-[50px]'>
+                <input 
+                 type="file"
+                 name="photo" 
+                 id="customFile"
+                 onChange={handleFileInputChange}
+                 accept='.jpg, .png'
+                 className='absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer'
+                />
+                <label 
+                 htmlFor="customFile"
+                 className='absolute top-0 left-0 w-full h-full flex items-center px-[0.75rem] py-[0.375rem]
+                 text-[15px] leading-6 overflow-hidden bg-[#0066ff46] text-headingColor font-semibold rounded-lg truncate cursor-pointer'
+                >
+                  Upload Photo
+                </label>
+              </div>
+</div>
+
+<div className="mt-7">
+<button type="submit" onClick={updateProfileHandler} className="bg-primaryColor text-white text-[18px] leading-[30px] 
+w-full py-3 px-4 rounded-lg">Update Profile</button>
+</div>
+
       </form>
     </div>
   );
