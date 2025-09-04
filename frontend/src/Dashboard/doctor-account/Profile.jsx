@@ -12,7 +12,7 @@ const Profile = () => {
     specialization:'',
     ticketPrice:0, 
      qualifications:[],
-     experiences:[{ starttingDate:"", endingDate:"", position:"", hospital:""}],
+     experiences:[],
      timeSlots:[{ day:"", startingTime:"", endingTime:""}],
      about:'',
       photo:null,
@@ -49,6 +49,14 @@ const handleResuableInputChangeFunc = (key, index, event) => {
   });
 };
 
+// reusable function for deleting item
+const deleteItem = (key, index) => {
+  setFormData(prevFormData => ({
+    ...prevFormData,
+    [key]: prevFormData[key].filter((_, i) => i !== index),
+  }));
+};
+
   const addQualificationHandler = e => {
     e.preventDefault()
 
@@ -64,7 +72,28 @@ const handleResuableInputChangeFunc = (key, index, event) => {
     handleResuableInputChangeFunc('qualifications', index, event)
   } 
 
-  
+  const deleteQualification = (e, index) => {
+    e.preventDefault();
+    deleteItem('qualifications', index)
+  };
+
+
+  const addExperience = e => {
+    e.preventDefault()
+
+    addItems('experiences', {
+      starttingDate:"", endingDate:"", position:"Senior Surgeon", hospital:"AIIMS"
+    })
+  };
+
+  const handleExperienceChange = (event, index) => {
+    handleResuableInputChangeFunc('experiences', index, event)
+  } 
+
+  const deleteExperience = (e, index) => {
+    e.preventDefault();
+    deleteItem('experiences', index)
+  };
 
   return (
     <div>
@@ -217,7 +246,9 @@ const handleResuableInputChangeFunc = (key, index, event) => {
         </div>
       </div>  
 
-         <button className="bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] 
+         <button 
+         onClick={e => deleteQualification(e, index)}
+         className="bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] 
        cursor-pointer">
    <AiOutlineDelete/> 
    </button>
@@ -242,6 +273,7 @@ const handleResuableInputChangeFunc = (key, index, event) => {
             name="startingDate"
             value={item.startingDate}
             className="form__input"
+            onChange={e => handleExperienceChange(e, index)}
           />
         </div>
         <div>
@@ -251,6 +283,7 @@ const handleResuableInputChangeFunc = (key, index, event) => {
             name="endingDate"
             value={item.endingDate}
             className="form__input"
+            onChange={e => handleExperienceChange(e, index)}
           />
         </div>
       </div>
@@ -262,6 +295,7 @@ const handleResuableInputChangeFunc = (key, index, event) => {
             name="position"
             value={item.position}
             className="form__input"
+            onChange={e => handleExperienceChange(e, index)}
           />
         </div>
         <div>
@@ -271,11 +305,14 @@ const handleResuableInputChangeFunc = (key, index, event) => {
             name="hospital"
             value={item.hospital}
             className="form__input"
+            onChange={e => handleExperienceChange(e, index)}
           />
         </div>
       </div>  
 
-         <button className="bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] 
+         <button 
+         onClick={e => deleteExperience(e, index)}
+         className="bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] 
        cursor-pointer">
    <AiOutlineDelete/> 
    </button>
@@ -283,7 +320,7 @@ const handleResuableInputChangeFunc = (key, index, event) => {
   </div>
 ))}
 
-<button className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
+<button onClick={addExperience} className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
   Add Experiences
 </button>
 </div>
