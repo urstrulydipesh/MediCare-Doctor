@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import uploadImageToCloudinary from "./../../utils/uploadCloudinary";
+import { BASE_URL, token }  from "./../../config";
+import {toast} from 'react-toastify';
 
-const Profile = () => {
+
+
+const Profile = (doctorData) => {
 
   const [formData, setFormData] = useState({
     name:'',
     email:'',
+    password:'',
     phone:'',
     bio:'',
     gender:'',
@@ -22,10 +28,35 @@ const Profile = () => {
        setFormData({...formData, [e.target.name]: e.target.value})
   };
 
-  const handleFileInputChange = e => {} ;
+  const handleFileInputChange = async event => {
+    const file = event.target.files[0];
+    const data = await uploadImageToCloudinary(file);
+    setFormData({...formData, photo: data?.url});
+  } ;
 
   const updateProfileHandler = async e => {
     e.preventDefault();
+
+try {
+  const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw Error(result.message);
+  }
+
+  toast.success(result.message);
+} catch (err) {
+  toast.error(err.message);
+}
   };
 
 // reuseable function to add items dynamically
