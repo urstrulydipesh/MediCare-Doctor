@@ -11,7 +11,7 @@ const Profile = () => {
     gender:'',
     specialization:'',
     ticketPrice:0, 
-     qualifications:[{ starttingDate:"", endingDate:"", degree:"", university:""}],
+     qualifications:[],
      experiences:[{ starttingDate:"", endingDate:"", position:"", hospital:""}],
      timeSlots:[{ day:"", startingTime:"", endingTime:""}],
      about:'',
@@ -31,16 +31,40 @@ const Profile = () => {
 // reuseable function to add items dynamically
 const addItems = (key, item) => {
 
-  setFormData(prevFormData => ({...prevFormData, [key]:[...prevFormData[key], item]}))
-}
+  setFormData(prevFormData => ({...prevFormData, [key]:[...prevFormData[key], item],}))
+};
+
+//resuable input change function
+const handleResuableInputChangeFunc = (key, index, event) => {
+  const { name, value } = event.target
+
+  setFormData(prevFormData => {
+    const updateItems = [...prevFormData[key]]
+
+    updateItems[index][name] = value;
+    return {
+      ...prevFormData,
+      [key]: updateItems,
+    };
+  });
+};
 
   const addQualificationHandler = e => {
     e.preventDefault()
 
     addItems('qualifications', {
-     starttingDate:"", endingDate:"", degree:"", university:""
+     starttingDate:"", 
+     endingDate:"", 
+     degree:"PHD", 
+     university:"Guru Gobind Singh Indraprastha University"
     })
-  }
+  };
+
+  const handleQualificationChange = (event, index) => {
+    handleResuableInputChangeFunc('qualifications', index, event)
+  } 
+
+  
 
   return (
     <div>
@@ -156,6 +180,7 @@ const addItems = (key, item) => {
             name="startingDate"
             value={item.startingDate}
             className="form__input"
+            onChange={e => handleQualificationChange(e, index)}
           />
         </div>
         <div>
@@ -165,6 +190,7 @@ const addItems = (key, item) => {
             name="endingDate"
             value={item.endingDate}
             className="form__input"
+            onChange={e => handleQualificationChange(e, index)}
           />
         </div>
       </div>
@@ -176,6 +202,7 @@ const addItems = (key, item) => {
             name="degree"
             value={item.degree}
             className="form__input"
+            onChange={e => handleQualificationChange(e, index)}
           />
         </div>
         <div>
@@ -185,6 +212,7 @@ const addItems = (key, item) => {
             name="university"
             value={item.university}
             className="form__input"
+            onChange={e => handleQualificationChange(e, index)} 
           />
         </div>
       </div>  
