@@ -13,7 +13,7 @@ const Profile = () => {
     ticketPrice:0, 
      qualifications:[],
      experiences:[],
-     timeSlots:[{ day:"", startingTime:"", endingTime:""}],
+     timeSlots:[ ],
      about:'',
       photo:null,
   })
@@ -94,6 +94,26 @@ const deleteItem = (key, index) => {
     e.preventDefault();
     deleteItem('experiences', index)
   };
+
+///
+  const addTimeSlot = e => {
+    e.preventDefault()
+
+    addItems('timeSlots', 
+      { day:"Sunday", startingTime:"10:00", endingTime:"04:30"}
+    )
+  };
+
+  const handleTimeSlotChange = (event, index) => {
+    handleResuableInputChangeFunc('timeSlots', index, event)
+  } 
+
+  const deleteTimeSlot = (e, index) => {
+    e.preventDefault();
+    deleteItem('timeSlots', index)
+  };
+
+ ////
 
   return (
     <div>
@@ -332,7 +352,12 @@ const deleteItem = (key, index) => {
       <div className="grid grid-cols-2 md:grid-cols-4 mb-[30px]  gap-5">
         <div>
           <p className="form__label">Day*</p>
-          <select name="day" value={item.day} className="form__input py-3.5">
+          <select 
+          name="day" 
+          value={item.day} 
+          className="form__input py-3.5"
+          onChange={e => handleTimeSlotChange(e, index)}
+          >
             <option value="">Select</option>
             <option value="saturady">Saturday</option>
             <option value="sunday">Sunady</option>
@@ -350,6 +375,7 @@ const deleteItem = (key, index) => {
             name="startingTime"
             value={item.startingTime}
             className="form__input"
+            onChange={e => handleTimeSlotChange(e, index)}
           />
         </div>
         <div>
@@ -359,9 +385,10 @@ const deleteItem = (key, index) => {
             name="endingTime"
             value={item.endingTime}
             className="form__input"
+            onChange={e => handleTimeSlotChange(e, index)} 
           />
         </div>
-        <div className="flex items-end">
+        <div onClick={e => deleteTimeSlot(e,index)} className="flex items-center">
            <button className="bg-red-600 p-2 rounded-full text-white text-[18px] 
        cursor-pointer mt-6">
    <AiOutlineDelete/> 
@@ -372,7 +399,7 @@ const deleteItem = (key, index) => {
   </div>
 ))}
 
-<button className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
+<button onClick={addTimeSlot} className="bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer">
   Add TimeSlots
 </button>
 </div>
