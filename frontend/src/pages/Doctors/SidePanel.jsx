@@ -1,4 +1,5 @@
 
+import convertTime from "../../utils/converTime";
 const SidePanel = ({doctorsId, ticketPrice, timeSlots}) => {
   return (
     <div className='shadow p-3 lg:p-5 rounded-md'>
@@ -7,7 +8,7 @@ const SidePanel = ({doctorsId, ticketPrice, timeSlots}) => {
                 Ticket Price
             </p>
             <span className='text-[16px] leading-7 lg:text-[22px] lg:leading-8 text-headingColor font-bold'>
-                {ticketPrice} INR 
+                {ticketPrice} INR  
             </span>
         </div>
         <div className='mt-[30px]'>
@@ -22,7 +23,8 @@ const SidePanel = ({doctorsId, ticketPrice, timeSlots}) => {
         {item.day.charAt(0).toUpperCase() + item.day.slice(1)}
       </p>
       <p className="text-[15px] leading-6 text-textColor font-semibold">
-        {item.startingTime} - {item.endingTime}
+        {convertTime(item.startingTime)} -
+        {convertTime(item.endingTime)}
       </p>
     </li>
   ))}
