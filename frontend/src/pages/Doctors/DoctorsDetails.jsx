@@ -97,7 +97,11 @@ const DoctorsDetails = () => {
           </div>
 
           <div>
-            <SidePanel/>
+            <SidePanel 
+            doctorId={doctors._id}
+            ticketPrice={ticketPrice}
+            timeSlots={timeSlots}
+            />
           </div>
         </div>
         ) }

@@ -111,7 +111,7 @@ const deleteItem = (key, index) => {
     e.preventDefault()
 
     addItems('qualifications', {
-     starttingDate:"", 
+     startingDate:"", 
      endingDate:"", 
      degree:"PHD", 
      university:"Guru Gobind Singh Indraprastha University"
@@ -132,7 +132,7 @@ const deleteItem = (key, index) => {
     e.preventDefault()
 
     addItems('experiences', {
-      starttingDate:"", endingDate:"", position:"Senior Surgeon", hospital:"AIIMS"
+      startingDate:"", endingDate:"", position:"Senior Surgeon", hospital:"AIIMS"
     })
   };
 
