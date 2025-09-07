@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import starIcon from '../../assets/images/Star.png'
 import { Link } from 'react-router-dom'
@@ -12,8 +11,8 @@ function DoctorCard({doctor}) {
     avgRating ,
     totalRating , 
     photo , 
-    experiences}
-      = doctor;
+    experiences
+  } = doctor;
 
   return (
     <div className='p-3 lg:p-5'>
@@ -51,7 +50,8 @@ function DoctorCard({doctor}) {
               </p>
             </div>
 
-            <Link to='/doctors' className='w-[44px] h-[44px] rounded-full border border-solid border-[#181A1E]
+            <Link 
+            to={`/doctors/${doctor._id}`} className='w-[44px] h-[44px] rounded-full border border-solid border-[#181A1E]
                    flex items-center group hover:bg-primaryColor hover:border-none justify-center'>
               <BsArrowRight className='group-hover:text-white w-6 h-5'/>
             </Link>

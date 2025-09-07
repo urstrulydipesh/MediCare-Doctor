@@ -9,7 +9,7 @@ const DoctorList = () => {
 
   return (
     <>
-      {loading && <Loader />}
+       {loading && <Loader />}
       {error && <Error />}
 
       {!loading && !error && (
@@ -19,7 +19,7 @@ const DoctorList = () => {
           ))}
         </div>
       )}
-    </>
+    </> 
   );
 };
 
