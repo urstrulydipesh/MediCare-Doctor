@@ -1,32 +1,79 @@
-import { useContext, useState } from 'react';
-import { authContext } from '../../context/AuthContext';
-import MyBookings from './MyBookings';
-import Profile from './Profile';
-import useGetProfile from '../../hooks/useFetchData';
-import { BASE_URL } from '../../config';
-import Loading from '../../components/Loader/Loading';
-import Error from '../../components/Error/Error';
-
+import { useContext, useState } from "react";
+import { authContext } from "../../context/AuthContext";
+import MyBookings from "./MyBookings";
+import Profile from "./Profile";
+import useGetProfile from "../../hooks/useFetchData";
+import { BASE_URL, token } from "../../config";
+import Loading from "../../components/Loader/Loading";
+import Error from "../../components/Error/Error";
+import { toast } from "react-toastify";
 
 const MyAccount = () => {
   const { dispatch } = useContext(authContext);
-  const [tab, setTab] = useState('myBookings');
+  const [tab, setTab] = useState("myBookings");
 
-  const { data: userData, loading, error } = useGetProfile(
-    `${BASE_URL}/users/profile/me`
-  );
+  const {
+    data: userData,
+    loading,
+    error,
+  } = useGetProfile(`${BASE_URL}/users/profile/me`);
 
-  const handleLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userData._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        let message = response.statusText;
+
+        try {
+          const errJson = await response.json();
+          message = errJson.message || message;
+        } catch {
+          console.log("No JSON response");
+        }
+
+        throw new Error(message || "Something went wrong");
+      }
+      // Successfully deleted the account, now log out the user
+      dispatch({ type: "LOGOUT" });
+    } catch (err) {
+      console.error("Failed to delete account:", err.message);
+    }
+  };
+
+  // Show toast notifications for delete API call
+  const deleteImpl = () => {
+    toast.promise(
+      handleDelete(),
+      {
+        pending: "Deleting account...",
+        success: "Account deleted successfully!",
+        error: {
+          render({ data }) {
+            return `Failed to delete account: ${data?.message || "Unknown error"}`;
+          },
+        },
+      }
+    );
+  };
+
+  const handleLogout = async () => {
+    await handleDelete();
+    dispatch({ type: "LOGOUT" });
   };
 
   return (
     <section>
       <div className="max-w-[1170px] px-5 mx-auto">
+        {loading && !error && <Loading />}
 
-      {loading && !error && <Loading />}
-
-      { error && !loading && <Error errMessage={error}/>}
+        {error && !loading && <Error errMessage={error} />}
 
         {!loading && !error && (
           <div className="grid md:grid-cols-3 gap-10">
@@ -46,7 +93,7 @@ const MyAccount = () => {
                 </h3>
                 <p className="text-[15px] text-textColor leading-6 font-medium">
                   {userData.email}
-                </p> 
+                </p>
                 <p className="text-[15px] text-textColor leading-6 font-medium">
                   Blood Type:
                   <span className="ml-2 text-headingColor text-[20px] leading-7">
@@ -62,7 +109,10 @@ const MyAccount = () => {
                 >
                   Logout
                 </button>
-                <button className="w-full bg-red-600 mt-4 p-3 text-[17px] leading-7 rounded-md text-white">
+                <button
+                  onClick={deleteImpl}
+                  className="w-full bg-red-600 mt-4 p-3 text-[17px] leading-7 rounded-md text-white"
+                >
                   Delete Account
                 </button>
               </div>
@@ -71,10 +121,10 @@ const MyAccount = () => {
             <div className="md:col-span-2 md:px-[30px]">
               <div>
                 <button
-                  onClick={() => setTab('myBookings')}
+                  onClick={() => setTab("myBookings")}
                   className={`${
-                    tab === 'myBookings' &&
-                    'bg-primaryColor text-white font-normal'
+                    tab === "myBookings" &&
+                    "bg-primaryColor text-white font-normal"
                   } p-2 mr-5 px-5 rounded-md text-headingColor font-semibold text-[16px] leading-7
                   border border-solid border-primaryColor`}
                 >
@@ -82,10 +132,10 @@ const MyAccount = () => {
                 </button>
 
                 <button
-                  onClick={() => setTab('settings')}
+                  onClick={() => setTab("settings")}
                   className={`${
-                    tab === 'settings' &&
-                    'bg-primaryColor text-white font-normal'
+                    tab === "settings" &&
+                    "bg-primaryColor text-white font-normal"
                   } p-2 mr-5 px-5 rounded-md text-headingColor font-semibold text-[16px] leading-7
                   border border-solid border-primaryColor`}
                 >
@@ -93,11 +143,11 @@ const MyAccount = () => {
                 </button>
               </div>
 
-              {tab === 'myBookings' && <MyBookings />}
-              {tab === 'settings' && <Profile user={userData}/>}
+              {tab === "myBookings" && <MyBookings />}
+              {tab === "settings" && <Profile user={userData} />}
             </div>
           </div>
-        )} 
+        )}
       </div>
     </section>
   );

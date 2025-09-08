@@ -20,7 +20,7 @@ const DoctorsDetails = () => {
   const { data: doctors, loading, error } = useFetchData(`${BASE_URL}/doctors/${id}`);
 
   const {name, 
-    qualification,
+    qualifications,
     experiences,
     timeSlots,
     reviews,
@@ -32,6 +32,8 @@ const DoctorsDetails = () => {
     ticketPrice,
     photo, 
   } = doctors
+
+  console.log("experiences:", experiences);
 
   return (
     <section>
@@ -86,12 +88,12 @@ const DoctorsDetails = () => {
                  <DoctorAbout 
                  name={name} 
                  about={about} 
-                 qualification={qualification} 
+                 qualifications={qualifications} 
               experiences={experiences}
               />
             )}
               {tab === 'feedback' && (
-                <Feedback reviews={reviews} totalRatings={totalRatings} />
+                <Feedback reviews={reviews} totalRatings={totalRatings} doctorId={doctors._id} />
               )}
             </div>
           </div>

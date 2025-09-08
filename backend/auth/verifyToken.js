@@ -14,7 +14,7 @@ export const authenticate = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     req.userId = decoded.id;
-    req.role = decoded.role; // 👈 this already has 'patient' or 'doctor'
+    req.role = decoded.role; // 
 
     next();
   } catch (error) {

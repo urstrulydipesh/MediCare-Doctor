@@ -30,6 +30,12 @@ const authReducer = (state, action) => {
         role: null,
         token: null,
       };
+    case "DELETE":
+      return {
+        user: null,
+        role: null,
+        token: null,
+      };
     default:
       return state;
   }

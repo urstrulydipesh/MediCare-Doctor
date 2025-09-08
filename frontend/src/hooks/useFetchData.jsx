@@ -27,7 +27,7 @@ const useFetchData = (url) => {
             const errJson = await response.json();
             message = errJson.message || message;
           } catch {
-            
+            console.log("No JSON response");
           }
 
           throw new Error(message || "Something went wrong");
