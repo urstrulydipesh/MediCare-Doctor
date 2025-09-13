@@ -46,7 +46,7 @@ const quickLinks01 = [
 
 const quickLinks02 = [
   {
-    path: "/find-a-doctore",
+    path: "/find-a-doctor",
     display: "Find a Doctor",
   },
 
