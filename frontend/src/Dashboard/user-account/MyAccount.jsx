@@ -19,10 +19,7 @@ const MyAccount = () => {
     error,
   } = useGetProfile(`${BASE_URL}/users/profile/me`);
 
-  // NOTE: It's better to get token from auth context / localStorage rather than an import.
-  // const token = localStorage.getItem('token'); // <-- prefer this
 
-  // Only performs DELETE API call and returns a promise. Does NOT dispatch logout.
   const handleDelete = async () => {
     setBusy(true);
     try {
@@ -45,20 +42,20 @@ const MyAccount = () => {
         throw new Error(message || "Something went wrong");
       }
 
-      // Return server response (could be empty)
+
       const json = await response.json().catch(() => null);
       setBusy(false);
       return json;
     } catch (err) {
       setBusy(false);
-      // rethrow so callers (toast.promise) see the rejection
+
       throw err;
     }
   };
 
-  // called when user presses the "Delete Account" button
+
   const deleteImpl = () => {
-    // Confirm — don't let users delete by accident
+
     if (!window.confirm("Are you sure you want to permanently delete your account? This cannot be undone.")) {
       return;
     }
@@ -72,31 +69,29 @@ const MyAccount = () => {
         success: "Account deleted successfully!",
         error: {
           render({ data }) {
-            // data is the error thrown from handleDelete
+
             return `Failed to delete account: ${data?.message || data?.toString() || "Unknown error"}`;
           },
         },
       }
     );
 
-    // After successful deletion, log the user out.
+
     deletePromise
       .then(() => {
         dispatch({ type: "LOGOUT" });
       })
       .catch(() => {
-        // error already handled by toast; nothing else to do
+
       });
   };
 
-  // Logout should NOT delete the account. Only log the user out locally / call logout endpoint.
+
   const handleLogout = async () => {
     setBusy(true);
     try {
-      // Optional: call server logout endpoint if you have one to invalidate tokens
-      // await fetch(`${BASE_URL}/auth/logout`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
 
-      // Clear client state, tokens, etc.
+
       dispatch({ type: "LOGOUT" });
     } catch (err) {
       console.error("Logout failed:", err);
