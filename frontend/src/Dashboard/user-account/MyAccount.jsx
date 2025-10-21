@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const MyAccount = () => {
   const { dispatch } = useContext(authContext);
   const [tab, setTab] = useState("myBookings");
+  const [busy, setBusy] = useState(false); // disables buttons during operations
 
   const {
     data: userData,
@@ -18,7 +19,12 @@ const MyAccount = () => {
     error,
   } = useGetProfile(`${BASE_URL}/users/profile/me`);
 
+  // NOTE: It's better to get token from auth context / localStorage rather than an import.
+  // const token = localStorage.getItem('token'); // <-- prefer this
+
+  // Only performs DELETE API call and returns a promise. Does NOT dispatch logout.
   const handleDelete = async () => {
+    setBusy(true);
     try {
       const response = await fetch(`${BASE_URL}/users/${userData._id}`, {
         method: "DELETE",
@@ -30,42 +36,74 @@ const MyAccount = () => {
 
       if (!response.ok) {
         let message = response.statusText;
-
         try {
           const errJson = await response.json();
           message = errJson.message || message;
         } catch {
-          console.log("No JSON response");
+          // no json in error
         }
-
         throw new Error(message || "Something went wrong");
       }
-      // Successfully deleted the account, now log out the user
-      dispatch({ type: "LOGOUT" });
+
+      // Return server response (could be empty)
+      const json = await response.json().catch(() => null);
+      setBusy(false);
+      return json;
     } catch (err) {
-      console.error("Failed to delete account:", err.message);
+      setBusy(false);
+      // rethrow so callers (toast.promise) see the rejection
+      throw err;
     }
   };
 
-  // Show toast notifications for delete API call
+  // called when user presses the "Delete Account" button
   const deleteImpl = () => {
+    // Confirm — don't let users delete by accident
+    if (!window.confirm("Are you sure you want to permanently delete your account? This cannot be undone.")) {
+      return;
+    }
+
+    const deletePromise = handleDelete();
+
     toast.promise(
-      handleDelete(),
+      deletePromise,
       {
         pending: "Deleting account...",
         success: "Account deleted successfully!",
         error: {
           render({ data }) {
-            return `Failed to delete account: ${data?.message || "Unknown error"}`;
+            // data is the error thrown from handleDelete
+            return `Failed to delete account: ${data?.message || data?.toString() || "Unknown error"}`;
           },
         },
       }
     );
+
+    // After successful deletion, log the user out.
+    deletePromise
+      .then(() => {
+        dispatch({ type: "LOGOUT" });
+      })
+      .catch(() => {
+        // error already handled by toast; nothing else to do
+      });
   };
 
+  // Logout should NOT delete the account. Only log the user out locally / call logout endpoint.
   const handleLogout = async () => {
-    await handleDelete();
-    dispatch({ type: "LOGOUT" });
+    setBusy(true);
+    try {
+      // Optional: call server logout endpoint if you have one to invalidate tokens
+      // await fetch(`${BASE_URL}/auth/logout`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+
+      // Clear client state, tokens, etc.
+      dispatch({ type: "LOGOUT" });
+    } catch (err) {
+      console.error("Logout failed:", err);
+      toast.error("Logout failed. Try again.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -105,13 +143,15 @@ const MyAccount = () => {
               <div className="mt-[50px] md:mt-[100px]">
                 <button
                   onClick={handleLogout}
-                  className="w-full bg-[#181A1E] p-3 text-[17px] leading-7 rounded-md text-white"
+                  disabled={busy}
+                  className={`w-full p-3 text-[17px] leading-7 rounded-md text-white ${busy ? "opacity-60 cursor-not-allowed" : "bg-[#181A1E]"}`}
                 >
                   Logout
                 </button>
                 <button
                   onClick={deleteImpl}
-                  className="w-full bg-red-600 mt-4 p-3 text-[17px] leading-7 rounded-md text-white"
+                  disabled={busy}
+                  className={`w-full mt-4 p-3 text-[17px] leading-7 rounded-md text-white ${busy ? "opacity-60 cursor-not-allowed" : "bg-red-600"}`}
                 >
                   Delete Account
                 </button>
