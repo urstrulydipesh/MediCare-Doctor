@@ -92,7 +92,7 @@ const Dashboard = () => {
                 </div>
                 )}
 
-              {tab === "appointments" && <Appointments appointments={data.appoinments}/>}
+              {tab === "appointments" && <Appointments appointments={data.appointments}/>}
               {tab === "settings" && <Profile doctorData={data}/>}
 
               </div>
