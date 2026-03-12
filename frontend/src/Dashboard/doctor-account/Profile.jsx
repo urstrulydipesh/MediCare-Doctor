@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import uploadImageToCloudinary from "./../../utils/uploadCloudinary";
-import { BASE_URL, token } from "./../../config";
+import { BASE_URL } from "./../../config";
 import { toast } from "react-toastify";
 
 const Profile = ({ doctorData }) => {
@@ -52,6 +52,7 @@ const Profile = ({ doctorData }) => {
   const updateProfileHandler = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("token");
     await toast.promise(
       (async () => {
         const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
