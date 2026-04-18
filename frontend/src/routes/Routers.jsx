@@ -7,7 +7,7 @@ import Doctors from "../pages/Doctors/Doctors"
 import DoctorsDetails from "../pages/Doctors/DoctorsDetails"
 import MyAccount from "../Dashboard/user-account/MyAccount" 
 import Dashboard from "../Dashboard/doctor-account/Dashboard"
-import CheckoutSuccess from "../pages/Doctors/checkoutSuccess"
+import CheckoutSuccess from "../pages/Doctors/CheckoutSuccess"
 
 
 import {Routes , Route} from 'react-router-dom'
