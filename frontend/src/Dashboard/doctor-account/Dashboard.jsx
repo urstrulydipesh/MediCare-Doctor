@@ -3,7 +3,7 @@ import Loader from "../../components/Loader/Loading";
 import Error from "../../components/Error/Error";
 import useGetProfile from "../../hooks/useFetchData";
 import { BASE_URL } from "../../config";
-import Tabs from "./tabs";
+import Tabs from "./Tabs";
 import starIcon from "../../assets/images/Star.png";
 import DoctorAbout from "./../../pages/Doctors/DoctorAbout";
 import Profile from "./Profile"
