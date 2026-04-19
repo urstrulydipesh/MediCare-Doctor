@@ -1,3 +1,3 @@
 # MediCare
-Dipesh Shah
+Dipesh Sah
 Doctor Booking WebApp.# MediCare-Doctor
