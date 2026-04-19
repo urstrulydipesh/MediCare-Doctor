@@ -40,14 +40,13 @@ npm install
 npm run dev
 ```
 
-## 📱 Live Demo
-
-- **Frontend:** [Deployed on Vercel](https://vercel.com)
-- **Backend:** [Deployed on Render](https://render.com)
+## 📱 Live Demo : https://medi-care-doctor-56lm.vercel.app/
 
 ## 👤 Author
 
 **Dipesh Sah**
+
+LinkedIn : https://www.linkedin.com/in/urstrulydipesh/
 
 ---
 
